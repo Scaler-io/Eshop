@@ -1,3 +1,4 @@
+using Eshop.Infrastructure.EventBus;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -25,6 +26,8 @@ namespace Eshop.ApiGateway
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Eshop.ApiGateway", Version = "v1" });
             });
+
+            services.AddRabbitMQ(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

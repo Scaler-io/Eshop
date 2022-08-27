@@ -1,10 +1,14 @@
-﻿using Eshop.Infrastructure.Mongo;
+﻿using Eshop.Infrastructure.EventBus;
+using Eshop.Infrastructure.Mongo;
 using Eshop.Infrastructure.Mongo.Interface;
 using Eshop.Infrastructure.Serilog;
+using Eshop.Product.Api.Handlers;
 using Eshop.Product.Api.Middlewares;
 using Eshop.Product.Api.Repositories;
 using Eshop.Product.Api.Services;
 using Eshop.Shared.Common;
+using Eshop.Shared.Constants;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -54,12 +58,38 @@ namespace Eshop.Product.Api.DependencyInjection
             // Mongodb configuration for product database
             services.AddMongoDb(configuration);
 
-            services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IProductService, ProductService>()
+                    .AddScoped<IProductRepository, ProductRepository>()
+                    .AddScoped<CreateOrUpdateProductHandler>();
 
             // Serilog configuration
             var logger = LoggerConfig.Configure(configuration);
             services.AddSingleton(x => logger);
+
+            // event bus connection
+            var rabbitMqOption = new RabbitMqOption();
+            configuration.GetSection("RabbitMq").Bind(rabbitMqOption);
+
+            services.AddMassTransit(x =>
+            {
+                x.AddConsumer<CreateOrUpdateProductHandler>();                  // Tells about the consumer
+                x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(cfg =>
+                {
+                    cfg.Host(new Uri(rabbitMqOption.ConnectionString), hostcfg =>
+                    {
+                        hostcfg.Username(rabbitMqOption.Username);
+                        hostcfg.Password(rabbitMqOption.Password);
+                    });
+
+                    cfg.ReceiveEndpoint(EventBusQueueNames.ProductQueueNames.CreateOrUpdate, ep =>
+                    {
+                        ep.PrefetchCount = 16;
+                        ep.UseMessageRetry(retryConfig => retryConfig.Interval(2, 100));
+                        ep.ConfigureConsumer<CreateOrUpdateProductHandler>(provider);
+                    });
+                }));
+            });
+
             return services;
         }
 
@@ -86,6 +116,9 @@ namespace Eshop.Product.Api.DependencyInjection
             {
                 endpoints.MapControllers();
             });
+
+            var busControl = app.ApplicationServices.GetService<IBusControl>();
+            busControl.Start();
 
             return app;
         }

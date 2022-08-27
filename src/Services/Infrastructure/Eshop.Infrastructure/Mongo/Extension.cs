@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Eshop.Infrastructure.Mongo.Interface;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 
@@ -8,7 +9,7 @@ namespace Eshop.Infrastructure.Mongo
     {
         public static void  AddMongoDb(this IServiceCollection services, IConfiguration configuration)
         {
-            var configSection = configuration.GetSection("mongo");
+            var configSection = configuration.GetSection("MongoConfig");
             var mongoConfig = new MongoConfig();
             configSection.Bind(mongoConfig);
 
@@ -19,9 +20,11 @@ namespace Eshop.Infrastructure.Mongo
 
             services.AddSingleton<IMongoDatabase>(client =>
             {
-                var mongoClient = client.GetService<MongoClient>();
+                var mongoClient = client.GetService<IMongoClient>();
                 return mongoClient.GetDatabase(mongoConfig.Database);
             });
+
+            services.AddSingleton<IDatabaseInitializer, MongoInitializer>();
         }
     }
 }

@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eshop.Product.Query.Api", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eshop.Product.DataAccess", "Services\Product\Eshop.Product.DataAccess\Eshop.Product.DataAccess.csproj", "{C6FEB992-1352-44DC-8BFC-6ABE03884B9B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eshop.User.DataAccess", "Services\User\Eshop.User.DataAccess\Eshop.User.DataAccess.csproj", "{3219AADA-619D-45F1-B2A6-9D75F29AE010}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{C6FEB992-1352-44DC-8BFC-6ABE03884B9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6FEB992-1352-44DC-8BFC-6ABE03884B9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6FEB992-1352-44DC-8BFC-6ABE03884B9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3219AADA-619D-45F1-B2A6-9D75F29AE010}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3219AADA-619D-45F1-B2A6-9D75F29AE010}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3219AADA-619D-45F1-B2A6-9D75F29AE010}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3219AADA-619D-45F1-B2A6-9D75F29AE010}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,6 +96,7 @@ Global
 		{EC100AA7-D257-4997-9483-FAAC2B1F7193} = {A03C1619-AB26-4D76-B938-E44FAAA7AB81}
 		{5FFD71D3-16CC-4243-A59C-9D480344F5CC} = {5B7AE21A-1E90-4994-A7DA-97A9EDD76870}
 		{C6FEB992-1352-44DC-8BFC-6ABE03884B9B} = {5B7AE21A-1E90-4994-A7DA-97A9EDD76870}
+		{3219AADA-619D-45F1-B2A6-9D75F29AE010} = {CF68B77E-7743-4A8A-A3FC-CC3057A9E9A0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {47A5AB53-49B1-474E-888F-FC41915670EB}

@@ -2,8 +2,6 @@
 using Eshop.Infrastructure.Mongo;
 using Eshop.Infrastructure.Mongo.Interface;
 using Eshop.Infrastructure.Serilog;
-using Eshop.Product.DataAccess.Repositories;
-using Eshop.Product.DataAccess.Services;
 using Eshop.Product.Query.Api.Handlers;
 using Eshop.Product.Query.Api.Middlewares;
 using MassTransit;
@@ -28,10 +26,7 @@ namespace Eshop.Product.Query.Api.DependencyInjections
             });
 
             services.AddMongoDb(configuration);
-
-            services.AddScoped<IProductRepository, ProductRepository>()
-                    .AddScoped<IProductService, ProductService>()
-                    .AddScoped<GetProductByIdHandler>();
+            services.AddScoped<GetProductByIdHandler>();
 
             // Serilog configuration
             var logger = LoggerConfig.Configure(configuration);

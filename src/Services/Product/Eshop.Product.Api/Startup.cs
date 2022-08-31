@@ -1,4 +1,5 @@
 using Eshop.Product.Api.DependencyInjection;
+using Eshop.Product.DataAccess.DependencyInjections;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -18,7 +19,8 @@ namespace Eshop.Product.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApplicationServices(_configuration);
-            
+            services.AddDataLayerServices();
+
             // event bus connection
             services.AddMassTransitConfigs(_configuration); ;
         }

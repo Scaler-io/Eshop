@@ -1,3 +1,4 @@
+using Eshop.Product.DataAccess.DependencyInjections;
 using Eshop.Product.Query.Api.DependencyInjections;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -18,6 +19,7 @@ namespace Eshop.Product.Query.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApplicationServices(_configuration);
+            services.AddDataLayerServices();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

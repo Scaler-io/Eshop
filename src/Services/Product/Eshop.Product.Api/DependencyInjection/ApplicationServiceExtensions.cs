@@ -1,4 +1,5 @@
-﻿using Eshop.Infrastructure.Mongo;
+﻿using Eshop.Infrastructure.Mappers;
+using Eshop.Infrastructure.Mongo;
 using Eshop.Infrastructure.Mongo.Interface;
 using Eshop.Infrastructure.Serilog;
 using Eshop.Product.Api.Handlers;
@@ -56,9 +57,7 @@ namespace Eshop.Product.Api.DependencyInjection
             // Mongodb configuration for product database
             services.AddMongoDb(configuration);
 
-            services.AddScoped<IProductService, ProductService>()
-                    .AddScoped<IProductRepository, ProductRepository>()
-                    .AddScoped<CreateOrUpdateProductHandler>();
+            services.AddScoped<CreateOrUpdateProductHandler>();
 
             // Serilog configuration
             var logger = LoggerConfig.Configure(configuration);

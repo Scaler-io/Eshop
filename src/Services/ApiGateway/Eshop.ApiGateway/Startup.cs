@@ -1,4 +1,8 @@
+using Eshop.ApiGateway.Services.Product;
 using Eshop.Infrastructure.EventBus;
+using Eshop.Infrastructure.Serilog;
+using Eshop.Product.Api.Middlewares;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -26,8 +30,13 @@ namespace Eshop.ApiGateway
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Eshop.ApiGateway", Version = "v1" });
             });
-
+            services.AddScoped<IProductEvent, ProductEvent>();
             services.AddRabbitMQ(Configuration);
+
+            // Serilog configuration
+            var logger = LoggerConfig.Configure(Configuration);
+            services.AddSingleton(x => logger);
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,12 +53,16 @@ namespace Eshop.ApiGateway
 
             app.UseRouting();
 
+            app.UseMiddleware<RequestExceptionMiddleware>();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
+            app.ApplicationServices.GetService<IBusControl>().Start();
         }
     }
 }

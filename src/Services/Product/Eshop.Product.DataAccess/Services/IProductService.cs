@@ -3,7 +3,7 @@ using Eshop.Infrastructure.Events.Product;
 using Eshop.Shared.Common;
 using System.Threading.Tasks;
 
-namespace Eshop.Product.Api.Services
+namespace Eshop.Product.DataAccess.Services
 {
     public interface IProductService
     {

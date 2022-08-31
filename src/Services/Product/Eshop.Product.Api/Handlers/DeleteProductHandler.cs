@@ -7,20 +7,21 @@ using System.Threading.Tasks;
 
 namespace Eshop.Product.Api.Handlers
 {
-    public class CreateOrUpdateProductHandler : IConsumer<CreateProduct>
+    public class DeleteProductHandler : IConsumer<DeleteProduct>
     {
         private readonly IProductService _productService;
         private readonly ILogger _logger;
-        public CreateOrUpdateProductHandler(IProductService productService, ILogger logger)
+
+        public DeleteProductHandler(IProductService productService, ILogger logger)
         {
             _productService = productService;
             _logger = logger;
         }
 
-        public async Task Consume(ConsumeContext<CreateProduct> context)
+        public async Task Consume(ConsumeContext<DeleteProduct> context)
         {
             _logger.Here().MethodEnterd();
-            await _productService.UpsertProduct(context.Message);
+            await _productService.DeleteProduct(context.Message.ProductId);
             _logger.Here().MethodExited();
         }
     }

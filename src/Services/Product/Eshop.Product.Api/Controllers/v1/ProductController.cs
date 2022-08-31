@@ -1,5 +1,5 @@
 ﻿using Eshop.Infrastructure.Commands.Product;
-using Eshop.Product.Api.Services;
+using Eshop.Product.DataAccess.Services;
 using Eshop.Shared.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;

@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using System.Threading.Tasks;
 
-namespace Eshop.ApiGateway
+namespace Eshop.Product.Query.Api
 {
     public class Program
     {
@@ -25,7 +26,10 @@ namespace Eshop.ApiGateway
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                })
-            .UseSerilog();
+                    webBuilder.ConfigureLogging(logging =>
+                    {
+                        logging.AddConsole();
+                    });
+                }).UseSerilog();
     }
 }

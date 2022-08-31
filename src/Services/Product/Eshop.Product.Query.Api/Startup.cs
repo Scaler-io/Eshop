@@ -1,10 +1,10 @@
-using Eshop.Product.Api.DependencyInjection;
+using Eshop.Product.Query.Api.DependencyInjections;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Eshop.Product.Api
+namespace Eshop.Product.Query.Api
 {
     public class Startup
     {
@@ -18,14 +18,11 @@ namespace Eshop.Product.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApplicationServices(_configuration);
-            
-            // event bus connection
-            services.AddMassTransitConfigs(_configuration); ;
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.AddConfigurationPiepline(env);
+            app.AddApplicationPipelines(env);
         }
     }
 }

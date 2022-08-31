@@ -1,13 +1,13 @@
 ﻿using Eshop.Infrastructure.Commands.Product;
 using Eshop.Infrastructure.Events.Product;
-using Eshop.Product.Api.Repositories;
+using Eshop.Product.DataAccess.Repositories;
 using Eshop.Shared.Common;
 using Eshop.Shared.Constants;
 using Eshop.Shared.Extensions;
 using Serilog;
 using System.Threading.Tasks;
 
-namespace Eshop.Product.Api.Services
+namespace Eshop.Product.DataAccess.Services
 {
     public class ProductService : IProductService
     {
@@ -37,8 +37,8 @@ namespace Eshop.Product.Api.Services
 
             if(product == null)
             {
-                _logger.Here().Warning("{@ErroCode}. No product found with id {@productId}", ErrorCodes.NotFound, id);
-                return null;
+                _logger.Here().Warning("{@ErrorCode}. No product found with id {@productId}", ErrorCodes.NotFound, id);
+                return Result<ProductCreated>.Fail(ErrorCodes.NotFound);
             }
 
             _logger.Here().Information("product found {@product}", product);

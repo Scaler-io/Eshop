@@ -1,13 +1,11 @@
-﻿using Eshop.Infrastructure.EventBus;
-using Eshop.Infrastructure.Mongo;
+﻿using Eshop.Infrastructure.Mongo;
 using Eshop.Infrastructure.Mongo.Interface;
 using Eshop.Infrastructure.Serilog;
 using Eshop.Product.Api.Handlers;
 using Eshop.Product.Api.Middlewares;
-using Eshop.Product.Api.Repositories;
-using Eshop.Product.Api.Services;
+using Eshop.Product.DataAccess.Repositories;
+using Eshop.Product.DataAccess.Services;
 using Eshop.Shared.Common;
-using Eshop.Shared.Constants;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -66,30 +64,6 @@ namespace Eshop.Product.Api.DependencyInjection
             var logger = LoggerConfig.Configure(configuration);
             services.AddSingleton(x => logger);
 
-            // event bus connection
-            var rabbitMqOption = new RabbitMqOption();
-            configuration.GetSection("RabbitMq").Bind(rabbitMqOption);
-
-            services.AddMassTransit(x =>
-            {
-                x.AddConsumer<CreateOrUpdateProductHandler>();                  // Tells about the consumer
-                x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(cfg =>
-                {
-                    cfg.Host(new Uri(rabbitMqOption.ConnectionString), hostcfg =>
-                    {
-                        hostcfg.Username(rabbitMqOption.Username);
-                        hostcfg.Password(rabbitMqOption.Password);
-                    });
-
-                    cfg.ReceiveEndpoint(EventBusQueueNames.ProductQueueNames.CreateOrUpdate, ep =>
-                    {
-                        ep.PrefetchCount = 16;
-                        ep.UseMessageRetry(retryConfig => retryConfig.Interval(2, 100));
-                        ep.ConfigureConsumer<CreateOrUpdateProductHandler>(provider);
-                    });
-                }));
-            });
-
             return services;
         }
 
@@ -110,15 +84,15 @@ namespace Eshop.Product.Api.DependencyInjection
 
             app.UseAuthorization();
 
-            app.ApplicationServices.GetService<IDatabaseInitializer>().InitializeAsync();
+            var dbInitilizer = app.ApplicationServices.GetService<IDatabaseInitializer>();
+            dbInitilizer.InitializeAsync();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
 
-            var busControl = app.ApplicationServices.GetService<IBusControl>();
-            busControl.Start();
+            app.ApplicationServices.GetService<IBusControl>().Start();
 
             return app;
         }

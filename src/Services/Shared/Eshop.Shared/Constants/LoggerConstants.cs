@@ -8,5 +8,8 @@
 
         public const string MemberName = "MemberName";
         public const string CallerType = "CallerType";
+        public const string CorrelationId = "CorrelationId";
+        public const string RequestId = "RequestId";
+        public const string MessageId = "MessageId";
     }
 }

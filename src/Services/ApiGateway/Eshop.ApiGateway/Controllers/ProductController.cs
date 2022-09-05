@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Eshop.ApiGateway.Controllers
 {
+    [Route("product")]
     public class ProductController : BaseApiController
     {
         private readonly IProductEvent _productEvent;

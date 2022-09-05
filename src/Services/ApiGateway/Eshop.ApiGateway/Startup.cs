@@ -1,4 +1,5 @@
 using Eshop.ApiGateway.Services.Product;
+using Eshop.ApiGateway.Services.User;
 using Eshop.Infrastructure.EventBus;
 using Eshop.Infrastructure.Serilog;
 using Eshop.Product.Api.Middlewares;
@@ -31,6 +32,7 @@ namespace Eshop.ApiGateway
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Eshop.ApiGateway", Version = "v1" });
             });
             services.AddScoped<IProductEvent, ProductEvent>();
+            services.AddScoped<IUserEvent, UserEvent>();
             services.AddRabbitMQ(Configuration);
 
             // Serilog configuration

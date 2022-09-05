@@ -20,6 +20,7 @@ namespace Eshop.User.Api
         {
             services.AddApplicationServices(_config);
             services.AddDAtaLayerServices();
+            services.AddMassTransitConfigs(_config);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

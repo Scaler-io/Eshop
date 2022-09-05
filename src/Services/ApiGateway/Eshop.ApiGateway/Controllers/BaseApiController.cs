@@ -5,7 +5,6 @@ using Serilog;
 
 namespace Eshop.ApiGateway.Controllers
 {
-    [Route("api/product")]
     [ApiController]
     public class BaseApiController : ControllerBase
     {

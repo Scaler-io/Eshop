@@ -2,7 +2,9 @@
 using Eshop.Infrastructure.Mongo.Interface;
 using Eshop.Infrastructure.Serilog;
 using Eshop.Shared.Common;
+using Eshop.User.Api.Handlers;
 using Eshop.User.Api.Middlewares;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -52,6 +54,8 @@ namespace Eshop.User.Api.DependencyInjections
             // Mongodb configuration for product database
             services.AddMongoDb(configuration);
 
+            services.AddScoped<CreateOrUpdateUserHandler>();
+
             // Serilog configuration
             var logger = LoggerConfig.Configure(configuration);
             services.AddSingleton(x => logger);
@@ -78,6 +82,8 @@ namespace Eshop.User.Api.DependencyInjections
             
             var dbInitilizer = app.ApplicationServices.GetService<IDatabaseInitializer>();
             dbInitilizer.InitializeAsync();
+            
+            app.ApplicationServices.GetService<IBusControl>().Start();
             
             app.UseEndpoints(endpoints =>
             {
